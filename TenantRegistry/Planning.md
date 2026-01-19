@@ -44,9 +44,7 @@ Pending → Active → Suspended → Closed
 | name                    | Legal / organization name                 |
 | slug                    | Unique code (abc-workshop)                |
 | status                  | pending / active / suspended / closed     |
-| industry                | optional                                  |
 | country / timezone      | localization                              |
-| onboarding_stage        | helps provisioning                        |
 | created_at / updated_at | system tracking                           |
 
 ---

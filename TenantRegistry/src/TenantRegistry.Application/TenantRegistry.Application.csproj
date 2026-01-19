@@ -5,6 +5,13 @@
     <ProjectReference Include="..\TenantRegistry.Contracts\TenantRegistry.Contracts.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Abstractions\Messaging\" />
+    <Folder Include="Abstractions\Repositories\" />
+    <Folder Include="Common\Exceptions\" />
+    <Folder Include="Tenants\Commands\ActivateTenant\" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>

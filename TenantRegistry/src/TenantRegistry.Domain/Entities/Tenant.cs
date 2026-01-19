@@ -9,11 +9,8 @@ public class Tenant
     public string Name { get; private set; } = default!;
     public string Slug { get; private set; } = default!;
     public TenantStatus Status { get; private set; }
-
-    public string? Industry { get; private set; }
     public string Country { get; private set; } = default!;
     public string Timezone { get; private set; } = default!;
-    public string? OnboardingStage { get; private set; }
 
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
@@ -86,12 +83,10 @@ public class Tenant
     // ---------- Profile Updates ----------
     public void UpdateProfile(
         string name,
-        string? industry,
         string country,
         string timezone)
     {
         Name = name;
-        Industry = industry;
         Country = country;
         Timezone = timezone;
         UpdatedAt = DateTime.UtcNow;

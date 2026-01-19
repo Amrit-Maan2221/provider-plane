@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/TenantRegistry.API/TenantRegistry.API.csproj" />
+    <Project Path="src/TenantRegistry.Application/TenantRegistry.Application.csproj" />
+    <Project Path="src/TenantRegistry.Contracts/TenantRegistry.Contracts.csproj" />
+    <Project Path="src/TenantRegistry.Domain/TenantRegistry.Domain.csproj" />
+    <Project Path="src/TenantRegistry.Infrastructure/TenantRegistry.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/TenantRegistry.Tests/TenantRegistry.Tests.csproj" />
+  </Folder>
+</Solution>

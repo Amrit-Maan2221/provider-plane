@@ -1,3 +1,4 @@
+using FluentValidation;
 using System.Net;
 using TenantRegistry.Application.Common.Exceptions;
 using TenantRegistry.Domain.Exceptions;
@@ -45,6 +46,20 @@ public class ExceptionHandlingMiddleware
             await context.Response.WriteAsJsonAsync(new
             {
                 error = ex.Message
+            });
+        }
+        catch (ValidationException ex)
+        {
+            _logger.LogWarning(ex,
+                "Validation failed. Path: {Path}, Method: {Method}",
+                context.Request.Path,
+                context.Request.Method);
+
+            context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+
+            await context.Response.WriteAsJsonAsync(new
+            {
+                error = ex.Errors.Select(e => e.ErrorMessage)
             });
         }
         catch (Exception ex)

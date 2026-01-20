@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using TenantRegistry.Application.Behaviors;
@@ -14,6 +15,7 @@ public static class DependencyInjection
                 Assembly.GetExecutingAssembly()
             );
         });
+
         services.AddTransient(
             typeof(IPipelineBehavior<,>),
             typeof(ValidationBehavior<,>)

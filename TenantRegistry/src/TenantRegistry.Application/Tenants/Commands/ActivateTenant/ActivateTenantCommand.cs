@@ -1,3 +1,5 @@
+using MediatR;
+
 namespace TenantRegistry.Application.Tenants.Commands.ActivateTenant;
 
-public record ActivateTenantCommand(Guid TenantId);
+public record ActivateTenantCommand(Guid TenantId) : IRequest<Unit>;

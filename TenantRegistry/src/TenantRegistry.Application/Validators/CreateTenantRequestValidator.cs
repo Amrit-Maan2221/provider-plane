@@ -1,7 +1,9 @@
 using FluentValidation;
-using TenantRegistry.API.DTOs;
+using TenantRegistry.Application.Tenants.Commands.CreateTenant;
 
-public class CreateTenantRequestValidator : AbstractValidator<CreateTenantRequest>
+namespace TenantRegistry.Application.Validators;
+
+public class CreateTenantRequestValidator : AbstractValidator<CreateTenantCommand>
 {
     public CreateTenantRequestValidator()
     {

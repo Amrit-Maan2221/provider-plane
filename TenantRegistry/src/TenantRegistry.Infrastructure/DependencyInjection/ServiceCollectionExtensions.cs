@@ -20,6 +20,7 @@ public static class ServiceCollectionExtensions
                 configuration.GetConnectionString("TenantRegistryDb")));
 
         services.AddScoped<ITenantRepository, TenantRepository>();
+        services.AddScoped<ITenantReadRepository, TenantReadRepository>();
         services.AddScoped<IEventPublisher, InMemoryEventPublisher>();
 
         return services;

@@ -1,3 +1,4 @@
+using MediatR;
 using TenantRegistry.Application.Abstractions.Messaging;
 using TenantRegistry.Application.Abstractions.Repositories;
 using TenantRegistry.Contracts.Events;
@@ -5,7 +6,7 @@ using TenantRegistry.Domain.Entities;
 
 namespace TenantRegistry.Application.Tenants.Commands.CreateTenant;
 
-public class CreateTenantHandler
+public class CreateTenantHandler : IRequestHandler<CreateTenantCommand, Guid>
 {
     private readonly ITenantRepository _tenantRepository;
     private readonly IEventPublisher _eventPublisher;

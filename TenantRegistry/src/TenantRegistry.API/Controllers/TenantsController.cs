@@ -1,63 +1,74 @@
-using Microsoft.AspNetCore.Http;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TenantRegistry.API.DTOs;
 using TenantRegistry.Application.Tenants.Commands.ActivateTenant;
 using TenantRegistry.Application.Tenants.Commands.CreateTenant;
+using TenantRegistry.Application.Tenants.Queries.GetAllTenants;
 using TenantRegistry.Application.Tenants.Queries.GetTenantById;
 
 namespace TenantRegistry.API.Controllers;
-[Route("api/[controller]")]
+
 [ApiController]
+[Route("api/[controller]")]
 public class TenantsController : ControllerBase
 {
-    private readonly CreateTenantHandler _createTenantHandler;
-    private readonly ActivateTenantHandler _activateTenantHandler;
-    private readonly GetTenantByIdHandler _getTenantHandler;
+    private readonly IMediator _mediator;
 
-    public TenantsController(
-        CreateTenantHandler createTenantHandler,
-        ActivateTenantHandler activateTenantHandler,
-        GetTenantByIdHandler getTenantHandler)
+    public TenantsController(IMediator mediator)
     {
-        _createTenantHandler = createTenantHandler;
-        _activateTenantHandler = activateTenantHandler;
-        _getTenantHandler = getTenantHandler;
+        _mediator = mediator;
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAll(CancellationToken ct)
+    {
+        var query = new GetAllTenantsQuery();
+        var tenants = await _mediator.Send(query, ct);
+        return Ok(tenants);
+    }
+
+    [HttpGet("{tenantId:guid}")]
+    public async Task<IActionResult> GetById(Guid tenantId, CancellationToken ct)
+    {
+        var query = new GetTenantByIdQuery(tenantId);
+        var tenant = await _mediator.Send(query, ct);
+        return Ok(tenant);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateTenantRequest request, CancellationToken ct)
+    public async Task<IActionResult> Create(
+        [FromBody] CreateTenantRequest request,
+        CancellationToken ct)
     {
         var command = new CreateTenantCommand(
             request.Name,
             request.Slug,
             request.Country,
             request.Timezone,
-            request.Contacts.Select(c => new CreateTenantContactCommand(
-                c.Name,
-                c.Email,
-                c.Phone,
-                c.IsPrimary
-            )).ToList());
+            request.Contacts.Select(c =>
+                new CreateTenantContactCommand(
+                    c.Name,
+                    c.Email,
+                    c.Phone,
+                    c.IsPrimary
+                )
+            ).ToList()
+        );
 
-        var tenantId = await _createTenantHandler.Handle(command, ct);
+        var tenantId = await _mediator.Send(command, ct);
 
-        return CreatedAtAction(nameof(GetById), new { tenantId }, new { tenantId });
+        return CreatedAtAction(
+            nameof(GetById),
+            new { tenantId },
+            new { tenantId }
+        );
     }
 
-    [HttpGet("{tenantId}")]
-    public async Task<IActionResult> GetById(Guid tenantId, CancellationToken ct)
-    {
-        var query = new GetTenantByIdQuery(tenantId);
-        var tenant = await _getTenantHandler.Handle(query, ct);
-        return Ok(tenant);
-    }
-
-    [HttpPost("{tenantId}/activate")]
+    [HttpPost("{tenantId:guid}/activate")]
     public async Task<IActionResult> Activate(Guid tenantId, CancellationToken ct)
     {
         var command = new ActivateTenantCommand(tenantId);
-        await _activateTenantHandler.Handle(command, ct);
+        await _mediator.Send(command, ct);
         return NoContent();
     }
 }
-

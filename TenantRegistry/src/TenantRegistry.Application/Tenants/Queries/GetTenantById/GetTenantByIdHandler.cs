@@ -1,11 +1,13 @@
+using MediatR;
 using TenantRegistry.Application.Abstractions.Repositories;
 using TenantRegistry.Application.Common.Exceptions;
+using TenantRegistry.Application.Tenants.Queries.DTOs;
 
 namespace TenantRegistry.Application.Tenants.Queries.GetTenantById;
 
-public class GetTenantByIdHandler
+public class GetTenantByIdHandler : IRequestHandler<GetTenantByIdQuery, TenantDto>
 {
-    private readonly ITenantRepository _tenantRepository;
+    private readonly ITenantRepository _tenantRepository; 
 
     public GetTenantByIdHandler(ITenantRepository tenantRepository)
     {

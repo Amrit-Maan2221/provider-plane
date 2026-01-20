@@ -47,15 +47,5 @@ public class TenantConfiguration : IEntityTypeConfiguration<Tenant>
             .WithOne()
             .HasForeignKey("TenantId")
             .OnDelete(DeleteBehavior.Cascade);
-
-        builder
-            .Navigation(t => t.Settings)
-            .UsePropertyAccessMode(PropertyAccessMode.Field);
-
-        builder
-            .HasMany(t => t.Settings)
-            .WithOne()
-            .HasForeignKey("TenantId")
-            .OnDelete(DeleteBehavior.Cascade);
     }
 }

@@ -1,6 +1,6 @@
 using TenantRegistry.Domain.Enums;
 
-namespace TenantRegistry.Application.Tenants.Queries.GetTenantById;
+namespace TenantRegistry.Application.Tenants.Queries.DTOs;
 
 public record TenantDto(
     Guid TenantId,

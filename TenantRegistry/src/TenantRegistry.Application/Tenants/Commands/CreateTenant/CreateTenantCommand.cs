@@ -1,3 +1,5 @@
+using MediatR;
+
 namespace TenantRegistry.Application.Tenants.Commands.CreateTenant;
 
 public record CreateTenantCommand(
@@ -6,4 +8,4 @@ public record CreateTenantCommand(
     string Country,
     string Timezone,
     IReadOnlyList<CreateTenantContactCommand> Contacts
-);
+) : IRequest<Guid>;

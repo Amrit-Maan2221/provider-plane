@@ -17,11 +17,7 @@ public class Tenant
 
     private readonly List<TenantContact> _contacts = new();
 
-    private readonly List<TenantSetting> _settings = new();
-
     public IReadOnlyCollection<TenantContact> Contacts => _contacts;
-
-    public IReadOnlyCollection<TenantSetting> Settings => _settings.AsReadOnly();
 
     private Tenant() { } // Required for EF Core
 
@@ -110,35 +106,5 @@ public class Tenant
             throw new DomainException("Only one primary contact allowed.");
 
         _contacts.AddRange(contacts);
-    }
-
-    public void ReplaceSettings(IEnumerable<TenantSetting> settings)
-    {
-        _settings.Clear();
-        _settings.AddRange(settings);
-    }
-
-    // Add or update single setting
-    public void SetSetting(string key, string value)
-    {
-        var existing = _settings.FirstOrDefault(x => x.Key == key);
-
-        if (existing is null)
-        {
-            _settings.Add(new TenantSetting(key, value));
-        }
-        else
-        {
-            existing.UpdateValue(value);
-        }
-    }
-
-    public void RemoveSetting(string key)
-    {
-        var existing = _settings.FirstOrDefault(x => x.Key == key);
-        if (existing != null)
-        {
-            _settings.Remove(existing);
-        }
     }
 }

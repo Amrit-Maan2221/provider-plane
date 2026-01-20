@@ -9,6 +9,7 @@ public class TenantRegistryDbContext : Microsoft.EntityFrameworkCore.DbContext
     }
 
     public Microsoft.EntityFrameworkCore.DbSet<Tenant> Tenants => Set<Tenant>();
+    public Microsoft.EntityFrameworkCore.DbSet<TenantContact> TenantContact => Set<TenantContact>();
 
     protected override void OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder modelBuilder)
     {

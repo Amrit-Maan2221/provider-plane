@@ -1,4 +1,4 @@
-# 🏢 **Tenant Registry Service — Design Blueprint**
+# 🏢 **Tenant Registry Service — Blueprint**
 
 ## 🎯 **Purpose**
 

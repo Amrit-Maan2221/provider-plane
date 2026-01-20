@@ -31,7 +31,13 @@ public class TenantsController : ControllerBase
             request.Name,
             request.Slug,
             request.Country,
-            request.Timezone);
+            request.Timezone,
+            request.Contacts.Select(c => new CreateTenantContactCommand(
+                c.Name,
+                c.Email,
+                c.Phone,
+                c.IsPrimary
+            )).ToList());
 
         var tenantId = await _createTenantHandler.Handle(command, ct);
 

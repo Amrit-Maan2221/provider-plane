@@ -6,9 +6,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Abstractions\Messaging\" />
     <Folder Include="Abstractions\Repositories\" />
     <Folder Include="Common\Exceptions\" />
+    <Folder Include="TenantSettings\" />
+    <Folder Include="TenantSettings\Commands\" />
+    <Folder Include="TenantSettings\Queries\" />
     <Folder Include="Tenants\Commands\ActivateTenant\" />
   </ItemGroup>
 

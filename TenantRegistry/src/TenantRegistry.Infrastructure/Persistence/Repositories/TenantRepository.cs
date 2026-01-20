@@ -32,6 +32,11 @@ public class TenantRepository : ITenantRepository
             .FirstOrDefaultAsync(t => t.Slug == slug, ct);
     }
 
+    public async Task SaveChangesAsync(CancellationToken ct)
+    {
+        await _dbContext.SaveChangesAsync(ct);
+    }
+
     public async Task UpdateAsync(Tenant tenant, CancellationToken ct = default)
     {
         _dbContext.Tenants.Update(tenant);

@@ -12,5 +12,11 @@ public class CreateTenantRequestValidator : AbstractValidator<CreateTenantReques
 
         RuleFor(x => x.Country).NotEmpty();
         RuleFor(x => x.Timezone).NotEmpty();
+        RuleFor(x => x.Contacts)
+            .NotEmpty().WithMessage("At least one contact is required.");
+
+        RuleFor(x => x.Contacts.Count(c => c.IsPrimary))
+            .Equal(1)
+            .WithMessage("Exactly one primary contact is required.");
     }
 }

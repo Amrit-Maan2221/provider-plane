@@ -15,6 +15,14 @@ public class Tenant
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
 
+    private readonly List<TenantContact> _contacts = new();
+
+    private readonly List<TenantSetting> _settings = new();
+
+    public IReadOnlyCollection<TenantContact> Contacts => _contacts;
+
+    public IReadOnlyCollection<TenantSetting> Settings => _settings.AsReadOnly();
+
     private Tenant() { } // Required for EF Core
 
     // ---------- Factory ----------
@@ -90,5 +98,47 @@ public class Tenant
         Country = country;
         Timezone = timezone;
         UpdatedAt = DateTime.UtcNow;
+    }
+
+
+    public void AddContacts(IEnumerable<TenantContact> contacts)
+    {
+        if (!contacts.Any(c => c.IsPrimary))
+            throw new DomainException("Primary contact is required.");
+
+        if (contacts.Count(c => c.IsPrimary) > 1)
+            throw new DomainException("Only one primary contact allowed.");
+
+        _contacts.AddRange(contacts);
+    }
+
+    public void ReplaceSettings(IEnumerable<TenantSetting> settings)
+    {
+        _settings.Clear();
+        _settings.AddRange(settings);
+    }
+
+    // Add or update single setting
+    public void SetSetting(string key, string value)
+    {
+        var existing = _settings.FirstOrDefault(x => x.Key == key);
+
+        if (existing is null)
+        {
+            _settings.Add(new TenantSetting(key, value));
+        }
+        else
+        {
+            existing.UpdateValue(value);
+        }
+    }
+
+    public void RemoveSetting(string key)
+    {
+        var existing = _settings.FirstOrDefault(x => x.Key == key);
+        if (existing != null)
+        {
+            _settings.Remove(existing);
+        }
     }
 }

@@ -30,6 +30,10 @@ public class CreateTenantHandler
             command.Country,
             command.Timezone);
 
+        var contacts = command.Contacts.Select(c => new TenantContact(c.Name, c.Email, c.Phone, c.IsPrimary));
+
+        tenant.AddContacts(contacts);
+
         await _tenantRepository.AddAsync(tenant, ct);
 
         await _eventPublisher.PublishAsync(

@@ -37,5 +37,25 @@ public class TenantConfiguration : IEntityTypeConfiguration<Tenant>
 
         builder.Property(t => t.UpdatedAt)
             .IsRequired();
+
+        builder
+            .Navigation(t => t.Contacts)
+            .UsePropertyAccessMode(PropertyAccessMode.Field);
+
+        builder
+            .HasMany(t => t.Contacts)
+            .WithOne()
+            .HasForeignKey("TenantId")
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder
+            .Navigation(t => t.Settings)
+            .UsePropertyAccessMode(PropertyAccessMode.Field);
+
+        builder
+            .HasMany(t => t.Settings)
+            .WithOne()
+            .HasForeignKey("TenantId")
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

@@ -4,5 +4,6 @@ public record CreateTenantCommand(
     string Name,
     string Slug,
     string Country,
-    string Timezone
+    string Timezone,
+    IReadOnlyList<CreateTenantContactCommand> Contacts
 );

@@ -30,16 +30,6 @@ const kpis = [
 function DashboardPage() {
   return (
     <div className="space-y-6">
-      {/* Page Header */}
-      <div>
-        <h1 className="text-2xl font-semibold text-gray-800">
-          Dashboard
-        </h1>
-        <p className="text-sm text-gray-500">
-          Overview of your platform
-        </p>
-      </div>
-
       {/* KPI Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {kpis.map((kpi) => (

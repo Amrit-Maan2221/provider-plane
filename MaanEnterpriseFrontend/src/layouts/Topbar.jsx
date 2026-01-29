@@ -1,13 +1,16 @@
 import { Menu, Bell, MessageSquare } from "lucide-react";
+import { usePageTitle } from "@/routes/usePageTitle";
 
 export default function Topbar({ onMenuClick }) {
+    const pageTitle = usePageTitle();
+    console.log("Current Page Title:", pageTitle);
   return (
     <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-2 md:px-4">
       <div className="flex items-center gap-4">
         <button onClick={onMenuClick} className="p-2 rounded-md lg:hidden hover:bg-gray-100">
          <Menu className="w-6 h-6 text-gray-600" />
         </button>
-        <h1 className="font-semibold text-gray-800 hidden md:block">Provider Portal</h1>
+        <h1 className="font-semibold text-gray-800 text-xl hidden md:block">{pageTitle}</h1>
       </div>
 
       {/* Utilities: Notifications, Chat, etc. */}

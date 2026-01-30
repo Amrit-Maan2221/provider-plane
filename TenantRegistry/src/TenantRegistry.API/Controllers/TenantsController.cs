@@ -5,6 +5,7 @@ using TenantRegistry.Application.Tenants.Commands.ActivateTenant;
 using TenantRegistry.Application.Tenants.Commands.CreateTenant;
 using TenantRegistry.Application.Tenants.Queries.GetAllTenants;
 using TenantRegistry.Application.Tenants.Queries.GetTenantById;
+using TenantRegistry.Application.Tenants.Queries.GetTenantsPaged;
 
 namespace TenantRegistry.API.Controllers;
 
@@ -33,6 +34,18 @@ public class TenantsController : ControllerBase
         var query = new GetTenantByIdQuery(tenantId);
         var tenant = await _mediator.Send(query, ct);
         return Ok(tenant);
+    }
+
+    [HttpGet("paged")]
+    public async Task<IActionResult> GetPaged(
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10,
+        CancellationToken ct = default)
+    {
+        var query = new GetTenantsPagedQuery(pageNumber, pageSize);
+        var result = await _mediator.Send(query, ct);
+
+        return Ok(result);
     }
 
     [HttpPost]
@@ -64,11 +77,11 @@ public class TenantsController : ControllerBase
         );
     }
 
-    [HttpPost("{tenantId:guid}/activate")]
-    public async Task<IActionResult> Activate(Guid tenantId, CancellationToken ct)
-    {
-        var command = new ActivateTenantCommand(tenantId);
-        await _mediator.Send(command, ct);
-        return NoContent();
-    }
+    // [HttpPost("{tenantId:guid}/activate")]
+    // public async Task<IActionResult> Activate(Guid tenantId, CancellationToken ct)
+    // {
+    //     var command = new ActivateTenantCommand(tenantId);
+    //     await _mediator.Send(command, ct);
+    //     return NoContent();
+    // }
 }

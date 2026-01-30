@@ -1,32 +1,27 @@
-import { useState } from 'react';
-import { Outlet } from 'react-router-dom';
-import Sidebar from './Sidebar';
-import Topbar from './Topbar';
+import { Outlet } from "react-router-dom";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import AppSidebar from "@/layouts/AppSidebar";
+import Topbar from "./Topbar";
+import { TopbarProvider } from "./TopbarContext";
 
 export default function MainLayout() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
   return (
-    <div className="flex h-screen bg-gray-50 overflow-hidden">
-      {/* Sidebar Overlay for Mobile */}
-      {isSidebarOpen && (
-        <div 
-          className="fixed inset-0 z-20 bg-black/50 lg:hidden"
-          onClick={() => setIsSidebarOpen(false)}
-        />
-      )}
+    <SidebarProvider>
+      <TopbarProvider>
+      <div className="flex h-screen w-full">
+        <AppSidebar />
 
-      <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
+        <div className="flex flex-1 flex-col">
+          <Topbar />
 
-      <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
-        <Topbar onMenuClick={() => setIsSidebarOpen(true)} />
-
-        <main className="flex-1 overflow-y-auto p-2 md:p-4">
-          <div className="max-w-7xl mx-auto">
-            <Outlet />
-          </div>
-        </main>
+          <main className="flex-1 overflow-y-auto p-2 md:p-4">
+            <div className="max-w-7xl mx-auto">
+              <Outlet />
+            </div>
+          </main>
+        </div>
       </div>
-    </div>
+      </TopbarProvider>
+    </SidebarProvider>
   );
 }

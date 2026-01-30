@@ -24,7 +24,6 @@ public class GetTenantByIdHandler : IRequestHandler<GetTenantByIdQuery, TenantDt
             tenant.TenantId,
             tenant.Name,
             tenant.Slug,
-            tenant.Status,
             tenant.Country,
             tenant.Timezone);
     }

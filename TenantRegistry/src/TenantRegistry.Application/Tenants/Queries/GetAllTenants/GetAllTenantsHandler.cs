@@ -1,10 +1,10 @@
 using MediatR;
 using TenantRegistry.Application.Abstractions.Repositories;
-using TenantRegistry.Application.Tenants.DTOs;
+using TenantRegistry.Application.Tenants.Queries.DTOs;
 
 namespace TenantRegistry.Application.Tenants.Queries.GetAllTenants;
 
-public sealed class GetAllTenantsHandler : IRequestHandler<GetAllTenantsQuery, IReadOnlyList<TenantListDto>>
+public sealed class GetAllTenantsHandler : IRequestHandler<GetAllTenantsQuery, IReadOnlyList<TenantDto>>
 {
     private readonly ITenantReadRepository _repository;
 
@@ -13,7 +13,7 @@ public sealed class GetAllTenantsHandler : IRequestHandler<GetAllTenantsQuery, I
         _repository = repository;
     }
 
-    public async Task<IReadOnlyList<TenantListDto>> Handle(
+    public async Task<IReadOnlyList<TenantDto>> Handle(
         GetAllTenantsQuery query,
         CancellationToken ct)
     {

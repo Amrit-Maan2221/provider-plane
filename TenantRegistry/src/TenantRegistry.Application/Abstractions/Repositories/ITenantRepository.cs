@@ -1,4 +1,3 @@
-using TenantRegistry.Application.Tenants.DTOs;
 using TenantRegistry.Domain.Entities;
 
 namespace TenantRegistry.Application.Abstractions.Repositories;

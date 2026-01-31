@@ -153,8 +153,7 @@ CREATE TABLE Products (
     idProductId INT IDENTITY(1,1) PRIMARY KEY,
     vcProductName     VARCHAR(64) NOT NULL,
     vcDescription     VARCHAR(255) NULL,
-    bitIsActive       BIT NOT NULL DEFAULT 1,
-    bitIsPublic       BIT NOT NULL DEFAULT 1,
+    bitActive       BIT NOT NULL DEFAULT 1,
     intCreatedBy INT NOT NULL,
     intUpdatedBy INT NOT NULL,
 
@@ -191,8 +190,8 @@ CREATE TABLE SubscriptionPlans (
     fltMonthlyPrice DECIMAL(10,2) NOT NULL,
     fltYearlyPrice DECIMAL(10,2) NULL,
 
-    bitIsActive BIT NOT NULL DEFAULT 1,
-
+    bitActive BIT NOT NULL DEFAULT 1,
+	bitHasAllFeatures BIT NOT NULL,
     intCreatedBy INT NOT NULL,
     intUpdatedBy INT NOT NULL,
     dtCreated DATETIME2 NOT NULL DEFAULT SYSDATETIME(),

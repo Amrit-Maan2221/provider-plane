@@ -180,91 +180,107 @@ CREATE TABLE ProductFeatures (
 );
 
 
-CREATE TABLE EntitlementStatuses(
-    intEntitlementStatusId INT  PRIMARY KEY,
-    vcEntitlementStatus  VARCHAR(20) NOT NULL,
+CREATE TABLE SubscriptionPlans (
+    idSubscriptionPlanId INT IDENTITY(1,1) PRIMARY KEY,
+
+    vcPlanCode VARCHAR(50) NOT NULL,
+    vcPlanName VARCHAR(150) NOT NULL,
+
+    vcDescription VARCHAR(255) NULL,
+
+    fltMonthlyPrice DECIMAL(10,2) NOT NULL,
+    fltYearlyPrice DECIMAL(10,2) NULL,
+
+    bitIsActive BIT NOT NULL DEFAULT 1,
+
+    intCreatedBy INT NOT NULL,
+    intUpdatedBy INT NOT NULL,
+    dtCreated DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
+    dtUpdated DATETIME2 NOT NULL DEFAULT SYSDATETIME()
+);
+
+CREATE TABLE SubscriptionPlanFeatures (
+    idSubscriptionPlanFeatureId INT IDENTITY(1,1) PRIMARY KEY,
+
+    intSubscriptionPlanId INT NOT NULL,
+    intProductFeatureId INT NOT NULL,
+
+    bitIsEnabled BIT NOT NULL DEFAULT 1,
+
+    -- optional future use
+    intLimitValue INT NULL,
+    vcLimitUnit VARCHAR(50) NULL,
+
+    intCreatedBy INT NOT NULL,
+    intUpdatedBy INT NOT NULL,
+    dtCreated DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
+    dtUpdated DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
+
+    CONSTRAINT FK_SPF_Plan
+        FOREIGN KEY (intSubscriptionPlanId)
+        REFERENCES SubscriptionPlans(idSubscriptionPlanId),
+
+    CONSTRAINT FK_SPF_Feature
+        FOREIGN KEY (intProductFeatureId)
+        REFERENCES ProductFeatures(idProductFeatureId)
+);
+
+CREATE TABLE SubscriptionStatuses (
+    intSubscriptionStatusId INT PRIMARY KEY,
+    vcSubscriptionStatus    VARCHAR(20) NOT NULL,
+
     intCreatedBy INT NOT NULL,
     intUpdatedBy INT NOT NULL,
 
     dtCreated DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
     dtUpdated DATETIME2 NOT NULL DEFAULT SYSDATETIME()
-)
+);
 
-
-INSERT INTO EntitlementStatuses (
-    intEntitlementStatusId,
-    vcEntitlementStatus,
+INSERT INTO SubscriptionStatuses (
+    intSubscriptionStatusId,
+    vcSubscriptionStatus,
     intCreatedBy,
     intUpdatedBy
 )
 VALUES
-    (1, 'active',    -1, -1),
-    (2, 'trial',     -1, -1),
-    (3, 'suspended', -1, -1),
-    (4, 'expired',   -1, -1),
-    (5, 'revoked',   -1, -1);
+    (1, 'trial',     -1, -1),
+    (2, 'active',    -1, -1),
+    (3, 'paused',    -1, -1),
+    (4, 'cancelled', -1, -1),
+    (5, 'expired',   -1, -1);
 
 
-CREATE TABLE TenantProductEntitlements (
-    idTenantProductEntitlementId INT IDENTITY(1,1) PRIMARY KEY,
+CREATE TABLE Subscriptions (
+    idSubscriptionId INT IDENTITY(1,1) PRIMARY KEY,
 
     intTenantId INT NOT NULL,
-    intProductId INT NOT NULL,
-    intEntitlementStatusId INT NOT NULL,
+    intSubscriptionPlanId INT NOT NULL,
+    intSubscriptionStatusId INT NOT NULL,
 
     dtStartDate DATETIME2 NOT NULL,
     dtEndDate DATETIME2 NULL,
+    dtNextBillingDate DATETIME2 NULL,
+
+    vcExternalReference VARCHAR(100) NULL,
 
     intCreatedBy INT NOT NULL,
     intUpdatedBy INT NOT NULL,
     dtCreated DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
     dtUpdated DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
 
-    CONSTRAINT FK_TPE_Tenants
-        FOREIGN KEY (intTenantId) REFERENCES Tenants(idTenantId),
+    CONSTRAINT FK_Subscriptions_Tenant
+        FOREIGN KEY (intTenantId)
+        REFERENCES Tenants(idTenantId),
 
-    CONSTRAINT FK_TPE_Products
-        FOREIGN KEY (intProductId) REFERENCES Products(idProductId),
+    CONSTRAINT FK_Subscriptions_Plan
+        FOREIGN KEY (intSubscriptionPlanId)
+        REFERENCES SubscriptionPlans(idSubscriptionPlanId),
 
-    CONSTRAINT FK_TPE_Status
-        FOREIGN KEY (intEntitlementStatusId)
-        REFERENCES EntitlementStatuses(intEntitlementStatusId)
+    CONSTRAINT FK_Subscriptions_Status
+        FOREIGN KEY (intSubscriptionStatusId)
+        REFERENCES SubscriptionStatuses(intSubscriptionStatusId)
 );
 
 
-CREATE UNIQUE INDEX UX_TenantProductEntitlements
-ON TenantProductEntitlements (intTenantId, intProductId);
-
-
-CREATE TABLE TenantProductFeatureEntitlements (
-    idTenantProductFeatureEntitlementId INT IDENTITY(1,1) PRIMARY KEY,
-
-    intTenantId INT NOT NULL,
-    intProductFeatureId INT NOT NULL,
-    intEntitlementStatusId INT NOT NULL,
-
-    dtStartDate DATETIME2 NOT NULL,
-    dtEndDate DATETIME2 NULL,
-
-    intCreatedBy INT NOT NULL,
-    intUpdatedBy INT NOT NULL,
-    dtCreated DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
-    dtUpdated DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
-
-    CONSTRAINT FK_TPFE_Tenants
-        FOREIGN KEY (intTenantId) REFERENCES Tenants(idTenantId),
-
-    CONSTRAINT FK_TPFE_Features
-        FOREIGN KEY (intProductFeatureId)
-        REFERENCES ProductFeatures(idProductFeatureId),
-
-    CONSTRAINT FK_TPFE_Status
-        FOREIGN KEY (intEntitlementStatusId)
-        REFERENCES EntitlementStatuses(intEntitlementStatusId)
-);
-
-
-CREATE UNIQUE INDEX UX_TenantProductFeatureEntitlements
-ON TenantProductFeatureEntitlements (intTenantId, intProductFeatureId);
 
 ```

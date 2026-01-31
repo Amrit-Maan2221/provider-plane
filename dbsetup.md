@@ -63,3 +63,49 @@ CREATE TABLE TagAssignments (
 CREATE UNIQUE INDEX UX_TagAssignments_Unique
 ON TagAssignments (intTagId, vcEntityType, intEntityId);
 ```
+
+
+# Contacts DB
+
+```sql
+USE ContactsDb;
+
+CREATE TABLE Contacts (
+    idContactId INT IDENTITY(1,1) PRIMARY KEY,
+
+    vcFirstName VARCHAR(100) NOT NULL,
+    vcLastName  VARCHAR(100) NOT NULL,
+    vcEmail     VARCHAR(255) NOT NULL,
+    vcPhone     VARCHAR(30) NOT NULL,
+    bitIsActive BIT NOT NULL DEFAULT 1,
+    intCreatedBy INT NOT NULL,
+    intUpdatedBy INT NOT NULL,
+    dtCreated   DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
+    dtUpdated   DATETIME2 NOT NULL DEFAULT SYSDATETIME()
+);
+
+CREATE UNIQUE INDEX UX_Contacts_Email
+ON Contacts(vcEmail);
+CREATE UNIQUE INDEX UX_Contacts_Phone
+ON Contacts(vcPhone);
+
+CREATE TABLE ContactLinks (
+    idContactLinkId INT IDENTITY(1,1) PRIMARY KEY,
+
+    intContactId INT NOT NULL,
+
+    vcEntityType VARCHAR(32) NOT NULL,  -- Tenant, Company, Workshop
+    intEntityId  INT NOT NULL,
+
+    vcRole       VARCHAR(32) NOT NULL,   -- Owner, Admin, Billing, Manager
+    bitIsPrimary BIT NOT NULL DEFAULT 0,
+
+    dtCreated    DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
+    intCreatedBy INT NULL,
+
+    CONSTRAINT FK_ContactLinks_Contacts
+        FOREIGN KEY (intContactId)
+        REFERENCES Contacts(idContactId)
+        ON DELETE CASCADE
+);
+```

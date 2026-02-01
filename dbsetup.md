@@ -322,4 +322,39 @@ CREATE TABLE TenantDatabases (
         FOREIGN KEY (intTenantId)
         REFERENCES Tenants(idTenantId)
 );
+
+
+CREATE TABLE TenantUsers (
+    idTenantUserId INT IDENTITY PRIMARY KEY,
+    vcEmail VARCHAR(255) NOT NULL,
+    vcPasswordHash VARCHAR(255) NOT NULL,
+    intTenantId INT NOT NULL,
+    vcFirstName VARCHAR(100) NOT NULL,
+    vcLastName  VARCHAR(100) NOT NULL,
+    bitActive BIT NOT NULL DEFAULT 1,
+    intCreatedBy INT NOT NULL,
+    intUpdatedBy INT NOT NULL,
+    dtCreated DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
+    dtUpdated DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
+);
+
+CREATE UNIQUE INDEX UX_Users_Email ON TenantUsers(vcEmail);
+
+
+CREATE TABLE TenantUserProducts (
+    idTenantMembershipId INT IDENTITY PRIMARY KEY,
+    intTenantUserId INT NOT NULL,
+    intProductId INT NOT NULL,
+    bitActive BIT NOT NULL DEFAULT 1,
+    intCreatedBy INT NOT NULL,
+    intUpdatedBy INT NOT NULL,
+    dtCreated DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
+    dtUpdated DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
+    CONSTRAINT FK_TM_User
+        FOREIGN KEY (intTenantUserId)
+        REFERENCES TenantUsers(idTenantUserId),
+    CONSTRAINT UX_User_Tenant
+        UNIQUE (intTenantUserId, intProductId)
+);
+
 ```

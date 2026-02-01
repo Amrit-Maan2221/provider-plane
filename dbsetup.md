@@ -305,3 +305,21 @@ CREATE TABLE Subscriptions (
 
 
 ```
+
+```
+USE ProviderPlane
+
+CREATE TABLE TenantDatabases (
+    idTenantDatabaseId INT IDENTITY PRIMARY KEY,
+    intTenantId INT NOT NULL,
+    vcProductCode VARCHAR(50) NOT NULL,   -- WORKSHOP
+    intDatabaseId INT NOT NULL,           -- FK to DatabasesDb
+    intCreatedBy INT NOT NULL,
+    intUpdatedBy INT NOT NULL,
+    dtCreated DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
+    dtUpdated DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
+    CONSTRAINT FK_TenantDatabases_Tenant
+        FOREIGN KEY (intTenantId)
+        REFERENCES Tenants(idTenantId)
+);
+```

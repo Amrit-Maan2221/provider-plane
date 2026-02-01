@@ -27,6 +27,28 @@ ALTER TABLE [dbo].[TagsGroups] ADD  DEFAULT (sysdatetime()) FOR [dtUpdated]
 GO
 
 
+# Databases Db
+
+```sql
+CREATE Database DatabasesDb
+Use DatabasesDb
+
+CREATE TABLE DatabasesTbl (
+    idDatabaseId INT IDENTITY PRIMARY KEY,
+    vcDatabaseName VARCHAR(128) NOT NULL,
+    vcServerName   VARCHAR(128) NOT NULL,
+    vcDbUser       VARCHAR(128) NOT NULL,
+    vcDbPassword  VARCHAR(256) NOT NULL, -- or KeyVault ref
+    vcRegion      VARCHAR(32) NOT NULL,  -- ca-central-1, eu-west-1
+    vcProductCode VARCHAR(50) NOT NULL,  -- WORKSHOP
+    bitActive BIT NOT NULL DEFAULT 1,
+    intCreatedBy INT NOT NULL,
+    intUpdatedBy INT NOT NULL,
+    dtCreated DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
+    dtUpdated DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
+);
+```
+
 CREATE TABLE Tags (
     idTagId INT IDENTITY(1,1) PRIMARY KEY,
     intTagGroupId INT NOT NULL,
